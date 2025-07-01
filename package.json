@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official DevCraftor SDK (AI, Gaming, Payment)",
   "type": "module",
   "main": "dist/devcraftor-sdk.cjs",
