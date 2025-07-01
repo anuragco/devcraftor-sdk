@@ -1,6 +1,6 @@
 # @devcraftor/sdk 🚀
 
-[![npm version](https://badge.fury.io/js/%40devcraftor%2Fsdk.svg)](https://www.npmjs.com/package/@devcraftor/sdk)
+[![npm version](https://badge.fury.io/js/@devcraftor/sdk.svg)](https://www.npmjs.com/package/@devcraftor/sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js CI](https://github.com/devcraftor/sdk/workflows/Node.js%20CI/badge.svg)](https://github.com/devcraftor/sdk/actions)
 
