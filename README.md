@@ -1,8 +1,8 @@
 # @devcraftor/sdk 🚀
 
-[![npm version](https://badge.fury.io/js/@devcraftor/sdk.svg)](https://www.npmjs.com/package/@devcraftor/sdk)
+[![npm version](https://badge.fury.io/js/%40devcraftor%2Fsdk.svg)](https://www.npmjs.com/package/@devcraftor/sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js CI](https://github.com/devcraftor/sdk/workflows/Node.js%20CI/badge.svg)](https://github.com/devcraftor/sdk/actions)
+[![Node.js Version](https://github.com/devcraftor/sdk/workflows/Node.js%20Version/badge.svg)](https://github.com/devcraftor/sdk/actions)
 
 A unified JavaScript/Node.js SDK providing streamlined access to **DevCraftor's Payment APIs**, **Gaming APIs**, and **AI Query APIs**. Built for modern JavaScript environments with full support for CommonJS, ES Modules, and browser UMD builds.
 
