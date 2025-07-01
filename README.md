@@ -594,13 +594,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Author
 
 **Anurag Anand**
-- GitHub: [@anuragdotanand](https://github.com/anuragdotanand)
-- Email: anurag@devcraftor.com
+- GitHub: [@anuragco](https://github.com/anuragco)
+- Email: aws.anu.co@gmail.com
 
 ## 📞 Support
 
 - **Documentation**: [https://docs.devcraftor.com](https://docs.devcraftor.com)
-- **Support Email**: support@devcraftor.com
+- **Support Email**: aws.anu.co@gmail.com
 - **GitHub Issues**: [https://github.com/devcraftor/sdk/issues](https://github.com/devcraftor/sdk/issues)
 - **Discord Community**: [https://discord.gg/devcraftor](https://discord.gg/devcraftor)
 
