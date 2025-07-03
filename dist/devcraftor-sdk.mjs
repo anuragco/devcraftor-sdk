@@ -3,7 +3,7 @@ import axios from 'axios';
 class Payment {
   constructor(token) {
     this.token = token;
-    this.apiBase = 'https://pay.color31.com/order';
+    this.apiBase = 'https://api.devcraftor.in/order';
   }
 
   async createPayment({ orderId, txnAmount, txnNote, cust_Mobile, cust_Email }) {
