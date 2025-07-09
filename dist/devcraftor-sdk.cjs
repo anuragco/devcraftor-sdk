@@ -3,22 +3,34 @@
 var axios = require('axios');
 
 class Payment {
-  constructor(token) {
+  constructor(token, apiKey, apiSecret) {
     this.token = token;
-    this.apiBase = 'https://api.devcraftor.in/order';
+    this.apiKey = apiKey;
+    this.apiSecret = apiSecret;
+    this.apiBase = 'https://connect.devcraftor.in/api';
   }
 
-  async createPayment({ orderId, txnAmount, txnNote, cust_Mobile, cust_Email }) {
+  headers(extra = {}) {
+    return {
+      'Content-Type': 'application/json',
+      'X-API-Key': this.apiKey,
+      'X-API-Secret': this.apiSecret,
+      ...extra
+    };
+  }
+
+   async createPayment({ orderId, txnAmount, txnNote, cust_Mobile, cust_Email }) {
     try {
-      const res = await axios.post(`${this.apiBase}/api/create_payment`, {
+      const res = await axios.post(`${this.apiBase}/v2/partner/payment_links`, {
         token: this.token,
         orderId,
         txnAmount,
         txnNote,
         cust_Mobile,
         cust_Email
+      }, {
+        headers: this.headers() 
       });
-
       return res.data;
     } catch (error) {
       return {
@@ -31,11 +43,12 @@ class Payment {
 
   async checkPaymentStatus(orderId) {
     try {
-      const res = await axios.post(`${this.apiBase}/status`, {
+      const res = await axios.post(`${this.apiBase}/v2/partner/order/status`, {
         token: this.token,
         orderId
+      }, {
+        headers: this.headers() 
       });
-
       return res.data;
     } catch (error) {
       return {
@@ -51,7 +64,7 @@ class GamingModule {
   constructor(apiKey, apiSecret) {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
-    this.baseUrl = "https://play.DevCraftor.in/api/v1/partner";
+    this.baseUrl = "https://connect.devcraftor.in/api/v2/partner";
   }
 
   headers(extra = {}) {
@@ -125,7 +138,7 @@ class AiModule {
 }
 
 class DevCraftorSDK {
-  static version = '1.0.0';
+  static version = '2.0.0';
 
   constructor() {
     this.services = {
@@ -135,8 +148,8 @@ class DevCraftorSDK {
     };
   }
 
-  initPayment({ key }) {
-    this.services.payment = new Payment(key); // 'key' maps to 'token' inside
+  initPayment({ token, apiKey, secret }) {
+    this.services.payment = new Payment(token, apiKey, secret); 
   }
 
   initGaming({ key, secret }) {
@@ -159,8 +172,6 @@ class DevCraftorSDK {
     return this.services.ai;
   }
 }
-
-// browser.js
 
 // Also expose it on the window object for browser
 if (typeof window !== 'undefined') {

@@ -3,7 +3,7 @@ import Gaming from '../modules/gaming.mjs';
 import Ai from '../modules/ai.mjs';
 
 class DevCraftorSDK {
-  static version = '1.0.0';
+  static version = '2.0.0';
 
   constructor() {
     this.services = {
@@ -13,8 +13,8 @@ class DevCraftorSDK {
     };
   }
 
-  initPayment({ key }) {
-    this.services.payment = new Payment(key); // 'key' maps to 'token' inside
+  initPayment({ token, apiKey, secret }) {
+    this.services.payment = new Payment(token, apiKey, secret); 
   }
 
   initGaming({ key, secret }) {

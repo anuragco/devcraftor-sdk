@@ -4,7 +4,7 @@ class GamingModule {
   constructor(apiKey, apiSecret) {
     this.apiKey = apiKey;
     this.apiSecret = apiSecret;
-    this.baseUrl = "https://play.DevCraftor.in/api/v1/partner";
+    this.baseUrl = "https://connect.devcraftor.in/api/v2/partner";
   }
 
   headers(extra = {}) {

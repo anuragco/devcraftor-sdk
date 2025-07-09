@@ -30,10 +30,21 @@ import DevCraftorSDK from '@devcraftor/sdk';
 
 const sdk = new DevCraftorSDK();
 
-// Initialize services
-const payment = sdk.initPayment({ key: 'your-merchant-token' });
-const gaming = sdk.initGaming({ key: 'your-api-key', secret: 'your-secret' });
-const ai = sdk.initAi({ key: 'your-ai-key' });
+// Initialize services with new authentication format
+const payment = sdk.initPayment({ 
+  token: 'your-merchant-token',
+  apiKey: 'your-payment-api-key',
+  secret: 'your-payment-secret'
+});
+
+const gaming = sdk.initGaming({ 
+  key: 'your-gaming-api-key', 
+  secret: 'your-gaming-secret' 
+});
+
+const ai = sdk.initAi({ 
+  key: 'your-ai-key' 
+});
 ```
 
 ### CommonJS
@@ -43,10 +54,21 @@ const DevCraftorSDK = require('@devcraftor/sdk');
 
 const sdk = new DevCraftorSDK();
 
-// Initialize services
-const payment = sdk.initPayment({ key: 'your-merchant-token' });
-const gaming = sdk.initGaming({ key: 'your-api-key', secret: 'your-secret' });
-const ai = sdk.initAi({ key: 'your-ai-key' });
+// Initialize services with new authentication format
+const payment = sdk.initPayment({ 
+  token: 'your-merchant-token',
+  apiKey: 'your-payment-api-key',
+  secret: 'your-payment-secret'
+});
+
+const gaming = sdk.initGaming({ 
+  key: 'your-gaming-api-key', 
+  secret: 'your-gaming-secret' 
+});
+
+const ai = sdk.initAi({ 
+  key: 'your-ai-key' 
+});
 ```
 
 ### Browser (UMD via CDN)
@@ -56,22 +78,35 @@ const ai = sdk.initAi({ key: 'your-ai-key' });
 <script>
   const sdk = new DevCraftorSDK();
   
-  // Initialize services
-  const payment = sdk.initPayment({ key: 'your-merchant-token' });
-  const gaming = sdk.initGaming({ key: 'your-api-key', secret: 'your-secret' });
-  const ai = sdk.initAi({ key: 'your-ai-key' });
+  // Initialize services with new authentication format
+  const payment = sdk.initPayment({ 
+    token: 'your-merchant-token',
+    apiKey: 'your-payment-api-key',
+    secret: 'your-payment-secret'
+  });
+  
+  const gaming = sdk.initGaming({ 
+    key: 'your-gaming-api-key', 
+    secret: 'your-gaming-secret' 
+  });
+  
+  const ai = sdk.initAi({ 
+    key: 'your-ai-key' 
+  });
 </script>
 ```
 
 ## 💳 Payment API
 
-The Payment module provides secure payment processing capabilities with merchant token authentication.
+The Payment module provides secure payment processing capabilities with enhanced three-factor authentication.
 
 ### Initialization
 
 ```javascript
 const payment = sdk.initPayment({ 
-  key: 'your-merchant-token' // Required: Your DevCraftor merchant token
+  token: 'your-merchant-token',    // Required: Your DevCraftor merchant token
+  apiKey: 'your-payment-api-key',  // Required: Your DevCraftor payment API key
+  secret: 'your-payment-secret'    // Required: Your DevCraftor payment secret
 });
 ```
 
@@ -370,6 +405,172 @@ try {
 }
 ```
 
+## 🔧 Error Handling
+
+The DevCraftor SDK uses promise-based methods that can throw errors. Proper error handling is crucial for production applications. Here's how to handle different types of errors:
+
+### Basic Error Handling
+
+```javascript
+import DevCraftorSDK from '@devcraftor/sdk';
+
+async function handlePaymentCreation() {
+  const sdk = new DevCraftorSDK();
+  const payment = sdk.initPayment({ 
+    token: 'your-merchant-token',
+    apiKey: 'your-payment-api-key',
+    secret: 'your-payment-secret'
+  });
+  
+  try {
+    const result = await payment.createPayment({
+      orderId: 'ORDER_123',
+      txnAmount: 100,
+      txnNote: 'Test payment',
+      cust_Mobile: '9876543210',
+      cust_Email: 'test@example.com'
+    });
+    
+    console.log('Payment created successfully:', result);
+    return result;
+  } catch (error) {
+    console.error('Payment creation failed:', error.message);
+    throw error;
+  }
+}
+```
+
+### Advanced Error Handling
+
+```javascript
+async function advancedErrorHandling() {
+  const sdk = new DevCraftorSDK();
+  const payment = sdk.initPayment({ 
+    token: 'your-merchant-token',
+    apiKey: 'your-payment-api-key',
+    secret: 'your-payment-secret'
+  });
+  
+  try {
+    const result = await payment.createPayment({
+      orderId: 'ORDER_123',
+      txnAmount: 100,
+      txnNote: 'Test payment',
+      cust_Mobile: '9876543210',
+      cust_Email: 'test@example.com'
+    });
+    
+    return result;
+  } catch (error) {
+    // Handle API response errors (4xx, 5xx)
+    if (error.response) {
+      console.error('API Error:', {
+        status: error.response.status,
+        data: error.response.data,
+        headers: error.response.headers
+      });
+      
+      // Handle specific error codes
+      switch (error.response.status) {
+        case 400:
+          throw new Error('Invalid request parameters');
+        case 401:
+          throw new Error('Authentication failed - check your credentials');
+        case 403:
+          throw new Error('Access forbidden - insufficient permissions');
+        case 404:
+          throw new Error('API endpoint not found');
+        case 429:
+          throw new Error('Rate limit exceeded - please retry later');
+        case 500:
+          throw new Error('Internal server error - please contact support');
+        default:
+          throw new Error(`API error: ${error.response.data.message || 'Unknown error'}`);
+      }
+    }
+    
+    // Handle network errors
+    if (error.request) {
+      console.error('Network Error:', error.message);
+      throw new Error('Network connection failed - please check your internet connection');
+    }
+    
+    // Handle other errors (SDK configuration, etc.)
+    console.error('SDK Error:', error.message);
+    throw error;
+  }
+}
+```
+
+### Error Handling with Gaming API
+
+```javascript
+async function handleGamingOperations() {
+  const sdk = new DevCraftorSDK();
+  const gaming = sdk.initGaming({ 
+    key: 'your-gaming-api-key', 
+    secret: 'your-gaming-secret' 
+  });
+  
+  try {
+    // Register user
+    const user = await gaming.registerUser({
+      name: 'John Doe',
+      gender: 'male',
+      email: 'john.doe@example.com',
+      mobile: '9876543210',
+      username: 'johndoe123',
+      password: 'securePassword123'
+    });
+    
+    // Get balance
+    const balance = await gaming.getBalance('9876543210');
+    
+    // Perform deposit
+    const deposit = await gaming.deposit({
+      mobile: '9876543210',
+      amount: 500.00,
+      transaction_id: 'DEP_' + Date.now()
+    });
+    
+    return { user, balance, deposit };
+  } catch (error) {
+    if (error.response?.data?.message) {
+      console.error('Gaming API Error:', error.response.data.message);
+    } else {
+      console.error('Gaming Operation Failed:', error.message);
+    }
+    throw error;
+  }
+}
+```
+
+### Error Handling with AI API
+
+```javascript
+async function handleAIQueries() {
+  const sdk = new DevCraftorSDK();
+  const ai = sdk.initAi({ key: 'your-ai-key' });
+  
+  try {
+    const response = await ai.ask('Explain quantum computing');
+    console.log('AI Response:', response.answer);
+    return response;
+  } catch (error) {
+    if (error.response?.status === 429) {
+      console.error('AI API rate limit exceeded');
+      throw new Error('Too many requests - please wait before trying again');
+    } else if (error.response?.status === 400) {
+      console.error('Invalid AI query');
+      throw new Error('Invalid query format or content');
+    } else {
+      console.error('AI Query Failed:', error.message);
+      throw error;
+    }
+  }
+}
+```
+
 ## 📚 Complete Usage Examples
 
 ### Node.js with ES Modules
@@ -380,10 +581,21 @@ import DevCraftorSDK from '@devcraftor/sdk';
 async function main() {
   const sdk = new DevCraftorSDK();
   
-  // Initialize all services
-  const payment = sdk.initPayment({ key: 'merchant-token' });
-  const gaming = sdk.initGaming({ key: 'api-key', secret: 'api-secret' });
-  const ai = sdk.initAi({ key: 'ai-key' });
+  // Initialize all services with new authentication format
+  const payment = sdk.initPayment({ 
+    token: 'merchant-token',
+    apiKey: 'payment-api-key',
+    secret: 'payment-secret'
+  });
+  
+  const gaming = sdk.initGaming({ 
+    key: 'gaming-api-key', 
+    secret: 'gaming-secret' 
+  });
+  
+  const ai = sdk.initAi({ 
+    key: 'ai-key' 
+  });
   
   try {
     // Create a payment
@@ -428,12 +640,21 @@ const DevCraftorSDK = require('@devcraftor/sdk');
 async function main() {
   const sdk = new DevCraftorSDK();
   
-  const payment = sdk.initPayment({ key: process.env.MERCHANT_TOKEN });
+  // Initialize services with new authentication format
+  const payment = sdk.initPayment({ 
+    token: process.env.MERCHANT_TOKEN,
+    apiKey: process.env.PAYMENT_API_KEY,
+    secret: process.env.PAYMENT_SECRET
+  });
+  
   const gaming = sdk.initGaming({ 
     key: process.env.GAMING_API_KEY, 
     secret: process.env.GAMING_API_SECRET 
   });
-  const ai = sdk.initAi({ key: process.env.AI_API_KEY });
+  
+  const ai = sdk.initAi({ 
+    key: process.env.AI_API_KEY 
+  });
   
   try {
     // Check payment status
@@ -470,13 +691,33 @@ main();
         async function initializeSDK() {
             const sdk = new DevCraftorSDK();
             
+            // Initialize services with new authentication format
+            const payment = sdk.initPayment({ 
+              token: 'your-merchant-token',
+              apiKey: 'your-payment-api-key',
+              secret: 'your-payment-secret'
+            });
+            
             const ai = sdk.initAi({ key: 'your-ai-key' });
             
             try {
-                const response = await ai.ask('What is machine learning?');
-                document.getElementById('ai-response').textContent = response.answer;
+                // Create a payment
+                const paymentResult = await payment.createPayment({
+                  orderId: 'ORDER_001',
+                  txnAmount: 50.00,
+                  txnNote: 'Browser payment test',
+                  cust_Mobile: '9876543210',
+                  cust_Email: 'user@example.com'
+                });
+                
+                // Ask AI a question
+                const aiResponse = await ai.ask('What is machine learning?');
+                
+                document.getElementById('payment-url').textContent = paymentResult.paymentUrl;
+                document.getElementById('ai-response').textContent = aiResponse.answer;
             } catch (error) {
-                console.error('AI query failed:', error);
+                console.error('SDK operation failed:', error);
+                document.getElementById('error-message').textContent = error.message;
             }
         }
         
@@ -484,7 +725,9 @@ main();
         window.addEventListener('load', initializeSDK);
     </script>
     
+    <div id="payment-url">Loading payment URL...</div>
     <div id="ai-response">Loading AI response...</div>
+    <div id="error-message" style="color: red;"></div>
 </body>
 </html>
 ```
@@ -496,7 +739,7 @@ main();
 ```javascript
 import DevCraftorSDK from '@devcraftor/sdk';
 
-console.log('SDK Version:', DevCraftorSDK.version); // "1.0.0"
+console.log('SDK Version:', DevCraftorSDK.version); // "2.0.0"
 ```
 
 ### Environment Variables
@@ -506,10 +749,68 @@ For security, use environment variables to store your API credentials:
 ```bash
 # .env file
 DEVCRAFTOR_MERCHANT_TOKEN=your-merchant-token
+DEVCRAFTOR_PAYMENT_API_KEY=your-payment-api-key
+DEVCRAFTOR_PAYMENT_SECRET=your-payment-secret
 DEVCRAFTOR_GAMING_API_KEY=your-gaming-api-key
 DEVCRAFTOR_GAMING_API_SECRET=your-gaming-api-secret
 DEVCRAFTOR_AI_API_KEY=your-ai-api-key
 ```
+
+## 📝 Changelog
+
+### v2.0.0 (Latest) - Breaking Changes
+
+#### 🚨 BREAKING CHANGES
+
+- **Payment API Authentication**: The `initPayment` method now requires three separate authentication parameters instead of a single `key`:
+  - **OLD**: `sdk.initPayment({ key: 'your-merchant-token' })`
+  - **NEW**: `sdk.initPayment({ token: 'your-merchant-token', apiKey: 'your-payment-api-key', secret: 'your-payment-secret' })`
+
+#### Migration Guide
+
+To upgrade from v1.x to v2.0.0:
+
+1. **Update Payment API initialization**:
+   ```javascript
+   // OLD (v1.x)
+   const payment = sdk.initPayment({ key: 'your-merchant-token' });
+   
+   // NEW (v2.0.0)
+   const payment = sdk.initPayment({ 
+     token: 'your-merchant-token',
+     apiKey: 'your-payment-api-key',
+     secret: 'your-payment-secret'
+   });
+   ```
+
+2. **Update environment variables**:
+   ```bash
+   # Add these new variables
+   DEVCRAFTOR_PAYMENT_API_KEY=your-payment-api-key
+   DEVCRAFTOR_PAYMENT_SECRET=your-payment-secret
+   ```
+
+3. **Gaming and AI APIs remain unchanged** - no migration needed for these services.
+
+#### New Features
+- ✅ Enhanced security with three-factor authentication for Payment API
+- ✅ Improved error handling with detailed error messages
+- ✅ Better TypeScript support with updated type definitions
+- ✅ Comprehensive documentation with error handling examples
+
+#### Bug Fixes
+- 🐛 Fixed authentication token refresh mechanism
+- 🐛 Improved network timeout handling
+- 🐛 Enhanced error response parsing
+
+### v1.0.0 (Previous)
+- ✅ Initial release
+- ✅ Payment API integration with single key authentication
+- ✅ Gaming API integration  
+- ✅ AI Query API integration
+- ✅ Full CommonJS, ES Modules, and UMD support
+- ✅ TypeScript definitions
+- ✅ Basic error handling
 
 ## 🔧 Technical Details
 
@@ -518,45 +819,6 @@ DEVCRAFTOR_AI_API_KEY=your-ai-api-key
 - **Error Handling**: Comprehensive error responses with detailed messages
 - **TypeScript**: Full TypeScript definitions included
 - **No External Dependencies**: Minimal footprint with only essential dependencies
-
-## 🛠️ Error Handling Best Practices
-
-```javascript
-import DevCraftorSDK from '@devcraftor/sdk';
-
-async function handleSDKOperations() {
-  const sdk = new DevCraftorSDK();
-  const payment = sdk.initPayment({ key: 'your-key' });
-  
-  try {
-    const result = await payment.createPayment({
-      orderId: 'ORDER_123',
-      txnAmount: 100,
-      txnNote: 'Test payment',
-      cust_Mobile: '9876543210',
-      cust_Email: 'test@example.com'
-    });
-    
-    return result;
-  } catch (error) {
-    // Check for API response errors
-    if (error.response) {
-      console.error('API Error:', error.response.status, error.response.data);
-      throw new Error(`Payment failed: ${error.response.data.message}`);
-    }
-    
-    // Check for network errors
-    if (error.request) {
-      console.error('Network Error:', error.message);
-      throw new Error('Network connection failed');
-    }
-    
-    // Other errors
-    console.error('SDK Error:', error.message);
-    throw error;
-  }
-}
-```
 
 ## 📖 API Documentation
 
@@ -604,22 +866,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **GitHub Issues**: [https://github.com/devcraftor/sdk/issues](https://github.com/devcraftor/sdk/issues)
 - **Discord Community**: [https://discord.gg/devcraftor](https://discord.gg/devcraftor)
 
-## 📝 Changelog
-
-### v1.0.0 (Latest)
-- ✅ Initial release
-- ✅ Payment API integration
-- ✅ Gaming API integration  
-- ✅ AI Query API integration
-- ✅ Full CommonJS, ES Modules, and UMD support
-- ✅ TypeScript definitions
-- ✅ Comprehensive error handling
-
-### Upgrade Notes
-- **Breaking Changes**: None (initial release)
-- **New Features**: All core functionality implemented
-- **Bug Fixes**: N/A (initial release)
-
 ## 🔮 Roadmap
 
 - [ ] WebSocket support for real-time gaming events
@@ -631,4 +877,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ by the Anurag Anand
+Made with ❤️ by Anurag Anand
