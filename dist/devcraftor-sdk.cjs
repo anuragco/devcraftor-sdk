@@ -108,12 +108,11 @@ class GamingModule {
     });
   }
 
-  generateGameUrl({ username, password, gameType }) {
+  generateGameUrl({ mobile }) {
     return axios.post(`${this.baseUrl}/auth/generate-url`, {
-      username,
-      password
+      mobile
     }, {
-      headers: this.headers({ "X-Game-Type": gameType })
+      headers: this.headers()
     });
   }
 }
@@ -138,7 +137,7 @@ class AiModule {
 }
 
 class DevCraftorSDK {
-  static version = '2.0.0';
+  static version = '2.0.1';
 
   constructor() {
     this.services = {

@@ -323,8 +323,7 @@ Generates an authenticated game launch URL with proper headers.
 ```javascript
 try {
   const gameAccess = await gaming.generateGameUrl({
-    username: 'johndoe123',
-    password: 'securePassword123',
+    mobile: "123456789",
     gameType: 'poker'
   });
   

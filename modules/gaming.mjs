@@ -48,12 +48,11 @@ class GamingModule {
     });
   }
 
-  generateGameUrl({ username, password, gameType }) {
+  generateGameUrl({ mobile }) {
     return axios.post(`${this.baseUrl}/auth/generate-url`, {
-      username,
-      password
+      mobile
     }, {
-      headers: this.headers({ "X-Game-Type": gameType })
+      headers: this.headers()
     });
   }
 }

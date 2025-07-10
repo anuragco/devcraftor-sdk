@@ -3,7 +3,7 @@ import Gaming from '../modules/gaming.mjs';
 import Ai from '../modules/ai.mjs';
 
 class DevCraftorSDK {
-  static version = '2.0.0';
+  static version = '2.0.1';
 
   constructor() {
     this.services = {
